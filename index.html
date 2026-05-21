@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cyberpunk Quiz Generator</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Orbitron',sans-serif;
+background:#050816;
+color:white;
+overflow-x:hidden;
+padding-bottom:50px;
+}
+
+body::before{
+content:"";
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at top,#00ffff33,transparent 40%),
+radial-gradient(circle at bottom,#ff00ff22,transparent 40%);
+z-index:-1;
+}
+
+header{
+text-align:center;
+padding:40px 20px;
+}
+
+header h1{
+font-size:3rem;
+color:#00ffff;
+text-shadow:0 0 10px #00ffff,0 0 20px #00ffff;
+}
+
+header p{
+margin-top:10px;
+color:#ccc;
+}
+
+.container{
+width:95%;
+max-width:1200px;
+margin:auto;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+border:1px solid rgba(0,255,255,0.3);
+border-radius:20px;
+padding:25px;
+margin-bottom:30px;
+backdrop-filter:blur(10px);
+box-shadow:0 0 15px rgba(0,255,255,0.2);
+}
+
+.section-title{
+font-size:1.5rem;
+margin-bottom:20px;
+color:#00ffff;
+}
+
+textarea{
+width:100%;
+height:400px;
+background:#111827;
+color:#00ffff;
+border:none;
+padding:20px;
+border-radius:15px;
+font-size:14px;
+resize:vertical;
+}
+
+button{
+padding:14px 22px;
+background:#00ffff;
+color:black;
+font-weight:bold;
+border:none;
+border-radius:12px;
+cursor:pointer;
+margin-top:15px;
+transition:0.3s;
+}
+
+button:hover{
+background:#ff00ff;
+color:white;
+transform:scale(1.05);
+}
+
+.links{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.link-card{
+background:#0f172a;
+padding:20px;
+border-radius:18px;
+border:1px solid #00ffff55;
+transition:0.3s;
+}
+
+.link-card:hover{
+transform:translateY(-8px);
+box-shadow:0 0 20px #00ffff;
+}
+
+.link-card h3{
+color:#00ffff;
+margin-bottom:10px;
+}
+
+.link-card a{
+color:white;
+text-decoration:none;
+word-break:break-all;
+}
+
+.quiz-box{
+text-align:center;
+}
+
+.option{
+display:block;
+width:100%;
+margin-top:15px;
+padding:15px;
+background:#111827;
+border:2px solid #00ffff44;
+border-radius:15px;
+cursor:pointer;
+transition:0.3s;
+font-size:1rem;
+}
+
+.option:hover{
+background:#00ffff22;
+}
+
+.correct{
+background:#16a34a !important;
+}
+
+.wrong{
+background:#dc2626 !important;
+}
+
+.explain{
+margin-top:20px;
+padding:20px;
+background:#111827;
+border-radius:15px;
+display:none;
+}
+
+.next-btn{
+display:none;
+}
+
+.result{
+display:none;
+text-align:center;
+}
+
+.progress{
+margin-bottom:20px;
+font-size:1.2rem;
+color:#00ffff;
+}
+
+@media(max-width:768px){
+
+header h1{
+font-size:2rem;
+}
+
+textarea{
+height:500px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CYBERPUNK QUIZ GENERATOR</h1>
+<p>自動產生15題問題｜適合各類科目與知識</p>
+</header>
+
+<div class="container">
+
+<div class="card">
+<h2 class="section-title">提示詞產生器</h2>
+
+<textarea id="promptBox">你是一位精通前端網頁開發（HTML/CSS/JavaScript）與 UI/UX 視覺設計的專家。請幫我製作一個可以直接上傳到 GitHub Pages 發布的單一 HTML 網頁（所有代碼、樣式、腳本全部寫在同一個 index.html 檔案中，不分檔）。
+
+建置需求如下：
+
+### 1. 網站基本資訊
+- 網站標題（Title）
+- 主題標籤（Tag）
+
+### 2. 視覺風格與美學
+- 核心風格：Cyberpunk
+- 指定配色：深藍、亮藍、紫色、粉色、白色
+
+### 3. 核心功能
+- easyQuestions 10題
+- hardQuestions 5題
+- 選項自動洗牌
+- 15題隨機出題
+- 解答與說明
+- 分數與結算
+- RWD 響應式設計
+
+### 4. 題庫格式
+{
+q:"題目",
+o:["正確答案","錯誤1","錯誤2"],
+a:0,
+e:"解答"
+}
+</textarea>
+
+<button onclick="copyPrompt()">複製提示詞</button>
+</div>
+
+<div class="card">
+<h2 class="section-title">題目網站入口</h2>
+
+<div class="links">
+
+<div class="link-card">
+<h3>夢核世界</h3>
+<a href="https://lpp0210-tech.github.io/test/" target="_blank">進入網站</a>
+</div>
+
+<div class="link-card">
+<h3>奇觀調查局</h3>
+<a href="https://hxj1028-boop.github.io/test/" target="_blank">進入網站</a>
+</div>
+
+<div class="link-card">
+<h3>Roblox 遊戲知識</h3>
+<a href="https://lucas-1103.github.io/test/" target="_blank">進入網站</a>
+</div>
+
+<div class="link-card">
+<h3>公民刑法大挑戰</h3>
+<a href="https://wilsonlin00611-tech.github.io/202060516/" target="_blank">進入網站</a>
+</div>
+
+<div class="link-card">
+<h3>歷史地理知識</h3>
+<a href="https://bhes109111-dot.github.io/test/" target="_blank">進入網站</a>
+</div>
+
+<div class="link-card">
+<h3>資訊安全小偵探</h3>
+<a href="https://bhes109307-cpu.github.io/test/" target="_blank">進入網站</a>
+</div>
+
+</div>
+</div>
+
+<div class="card quiz-box">
+
+<div class="progress" id="progress"></div>
+
+<h2 id="question">題目載入中...</h2>
+
+<div id="options"></div>
+
+<div class="explain" id="explain"></div>
+
+<button class="next-btn" id="nextBtn" onclick="nextQuestion()">下一題</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+</div>
+
+<script>
+
+function copyPrompt(){
+const box=document.getElementById("promptBox");
+box.select();
+document.execCommand("copy");
+alert("提示詞已複製！");
+}
+
+/* ==========================
+若要更換題目，只需修改此處陣列
+========================== */
+
+const easyQuestions=[];
+
+for(let i=1;i<=35;i++){
+easyQuestions.push({
+q:`基礎題目 ${i}`,
+o:[`正確答案 ${i}`,"錯誤答案A","錯誤答案B"],
+a:0,
+e:`這是第 ${i} 題的解答說明`
+});
+}
+
+const hardQuestions=[];
+
+for(let i=1;i<=15;i++){
+hardQuestions.push({
+q:`進階題目 ${i}`,
+o:[`正確答案 ${i}`,"錯誤答案A","錯誤答案B"],
+a:0,
+e:`這是進階題 ${i} 的詳細解答`
+});
+}
+
+function shuffle(array){
+return array.sort(()=>Math.random()-0.5);
+}
+
+let selectedQuestions=[];
+let currentQuestion=0;
+let score=0;
+
+function generateQuiz(){
+
+selectedQuestions=[
+...shuffle([...easyQuestions]).slice(0,10),
+...shuffle([...hardQuestions]).slice(0,5)
+];
+
+currentQuestion=0;
+score=0;
+
+document.getElementById("result").style.display="none";
+
+showQuestion();
+
+}
+
+function showQuestion(){
+
+const q=selectedQuestions[currentQuestion];
+
+document.getElementById("progress").innerHTML=
+`第 ${currentQuestion+1} / 15 題 ｜ 分數：${score}`;
+
+document.getElementById("question").innerHTML=q.q;
+
+const optionsDiv=document.getElementById("options");
+optionsDiv.innerHTML="";
+
+document.getElementById("explain").style.display="none";
+document.getElementById("nextBtn").style.display="none";
+
+let shuffled=q.o.map((text,index)=>({
+text,
+correct:index===q.a
+}));
+
+shuffled=shuffle(shuffled);
+
+shuffled.forEach(opt=>{
+
+const btn=document.createElement("button");
+
+btn.className="option";
+
+btn.innerHTML=opt.text;
+
+btn.onclick=()=>selectAnswer(btn,opt.correct,shuffled,q);
+
+optionsDiv.appendChild(btn);
+
+});
+
+}
+
+function selectAnswer(button,correct,shuffled,q){
+
+const buttons=document.querySelectorAll(".option");
+
+buttons.forEach(btn=>btn.disabled=true);
+
+buttons.forEach((btn,index)=>{
+
+if(shuffled[index].correct){
+btn.classList.add("correct");
+}
+});
+
+if(correct){
+
+button.classList.add("correct");
+score+=10;
+
+}else{
+
+button.classList.add("wrong");
+
+}
+
+document.getElementById("explain").style.display="block";
+
+document.getElementById("explain").innerHTML=
+`<h3>解答說明</h3><br>${q.e}`;
+
+document.getElementById("nextBtn").style.display="inline-block";
+
+}
+
+function nextQuestion(){
+
+currentQuestion++;
+
+if(currentQuestion>=15){
+
+showResult();
+
+}else{
+
+showQuestion();
+
+}
+
+}
+
+function showResult(){
+
+document.getElementById("question").innerHTML="挑戰完成";
+
+document.getElementById("options").innerHTML="";
+
+document.getElementById("explain").style.display="none";
+
+document.getElementById("nextBtn").style.display="none";
+
+let comment="";
+
+if(score>=130){
+
+comment="完美破案！你已經掌握大部分觀念。";
+
+}else if(score>=90){
+
+comment="表現不錯！再複習幾個觀念，就能更穩。";
+
+}else{
+
+comment="線索還有點混亂，重新挑戰一次，下一輪就能抓到關鍵重點。";
+
+}
+
+const result=document.getElementById("result");
+
+result.style.display="block";
+
+result.innerHTML=
+`
+<h2>總分：${score} / 150</h2>
+<br>
+<h3>${comment}</h3>
+<br>
+<button onclick="generateQuiz()">重新挑戰</button>
+`;
+
+}
+
+generateQuiz();
+
+</script>
+
+</body>
+</html>
