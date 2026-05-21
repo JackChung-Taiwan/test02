@@ -3,491 +3,430 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cyberpunk Quiz Generator</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
-
+<title>自動產生15題問題｜麥塊知識闖關基地</title>
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --grass:#55b948;--grass2:#2f8f3a;--dirt:#8b5a2b;--dirt2:#5b3418;
+  --stone:#6b7280;--coal:#1f2937;--diamond:#3ee7ff;--torch:#ffd34e;--wool:#fff7df;--red:#e04435;
 }
-
+html{scroll-behavior:smooth}
 body{
-font-family:'Orbitron',sans-serif;
-background:#050816;
-color:white;
-overflow-x:hidden;
-padding-bottom:50px;
+  font-family:"Trebuchet MS","Noto Sans TC",system-ui,sans-serif;
+  color:#20150b;
+  background:
+    linear-gradient(45deg, rgba(255,255,255,.05) 25%, transparent 25%) 0 0/32px 32px,
+    linear-gradient(-45deg, rgba(0,0,0,.06) 25%, transparent 25%) 0 0/32px 32px,
+    linear-gradient(#7cc7ff 0 0) fixed;
+  min-height:100vh;
 }
-
-body::before{
-content:"";
-position:fixed;
-width:100%;
-height:100%;
-background:
-radial-gradient(circle at top,#00ffff33,transparent 40%),
-radial-gradient(circle at bottom,#ff00ff22,transparent 40%);
-z-index:-1;
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:
+    linear-gradient(to bottom,#7cc7ff 0 36%,#92d96b 36% 43%,#7b4a23 43% 100%);
 }
-
-header{
-text-align:center;
-padding:40px 20px;
-}
-
-header h1{
-font-size:3rem;
-color:#00ffff;
-text-shadow:0 0 10px #00ffff,0 0 20px #00ffff;
-}
-
-header p{
-margin-top:10px;
-color:#ccc;
-}
-
-.container{
-width:95%;
-max-width:1200px;
-margin:auto;
-}
-
-.card{
-background:rgba(255,255,255,0.05);
-border:1px solid rgba(0,255,255,0.3);
-border-radius:20px;
-padding:25px;
-margin-bottom:30px;
-backdrop-filter:blur(10px);
-box-shadow:0 0 15px rgba(0,255,255,0.2);
-}
-
-.section-title{
-font-size:1.5rem;
-margin-bottom:20px;
-color:#00ffff;
-}
-
-textarea{
-width:100%;
-height:400px;
-background:#111827;
-color:#00ffff;
-border:none;
-padding:20px;
-border-radius:15px;
-font-size:14px;
-resize:vertical;
-}
-
-button{
-padding:14px 22px;
-background:#00ffff;
-color:black;
-font-weight:bold;
-border:none;
-border-radius:12px;
-cursor:pointer;
-margin-top:15px;
-transition:0.3s;
-}
-
-button:hover{
-background:#ff00ff;
-color:white;
-transform:scale(1.05);
-}
-
-.links{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:20px;
-}
-
-.link-card{
-background:#0f172a;
-padding:20px;
-border-radius:18px;
-border:1px solid #00ffff55;
-transition:0.3s;
-}
-
-.link-card:hover{
-transform:translateY(-8px);
-box-shadow:0 0 20px #00ffff;
-}
-
-.link-card h3{
-color:#00ffff;
-margin-bottom:10px;
-}
-
-.link-card a{
-color:white;
-text-decoration:none;
-word-break:break-all;
-}
-
-.quiz-box{
-text-align:center;
-}
-
-.option{
-display:block;
-width:100%;
-margin-top:15px;
-padding:15px;
-background:#111827;
-border:2px solid #00ffff44;
-border-radius:15px;
-cursor:pointer;
-transition:0.3s;
-font-size:1rem;
-}
-
-.option:hover{
-background:#00ffff22;
-}
-
-.correct{
-background:#16a34a !important;
-}
-
-.wrong{
-background:#dc2626 !important;
-}
-
-.explain{
-margin-top:20px;
-padding:20px;
-background:#111827;
-border-radius:15px;
-display:none;
-}
-
-.next-btn{
-display:none;
-}
-
-.result{
-display:none;
-text-align:center;
-}
-
-.progress{
-margin-bottom:20px;
-font-size:1.2rem;
-color:#00ffff;
-}
-
-@media(max-width:768px){
-
-header h1{
-font-size:2rem;
-}
-
-textarea{
-height:500px;
-}
-
+.pixel-border{border:5px solid #20150b;box-shadow:8px 8px 0 #20150b}
+.hero{max-width:1180px;margin:24px auto;padding:28px;position:relative;background:var(--wool)}
+.hero:before{content:"";position:absolute;left:0;right:0;top:0;height:18px;background:repeating-linear-gradient(90deg,var(--grass) 0 28px,var(--grass2) 28px 56px)}
+.kicker{display:inline-block;margin-top:12px;padding:8px 12px;background:var(--coal);color:var(--diamond);border:3px solid #20150b;font-weight:900}
+h1{font-size:clamp(2.1rem,6vw,5rem);line-height:1.05;margin:18px 0 10px;text-shadow:4px 4px 0 var(--torch)}
+.subtitle{font-size:clamp(1rem,2.5vw,1.45rem);font-weight:900}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
+.btn,.world-card a,button{appearance:none;border:4px solid #20150b;background:var(--torch);color:#20150b;padding:12px 18px;font-weight:900;text-decoration:none;cursor:pointer;box-shadow:5px 5px 0 #20150b;transition:.12s transform,.12s box-shadow;font-size:1rem}
+.btn:hover,.world-card a:hover,button:hover{transform:translate(3px,3px);box-shadow:2px 2px 0 #20150b}
+.wrap{width:min(1180px,94%);margin:0 auto 40px}
+.section{background:#fff7df;margin:26px 0;padding:24px}
+.section-title{font-size:clamp(1.4rem,3vw,2.2rem);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-title span{display:inline-grid;place-items:center;width:44px;height:44px;background:var(--grass);border:4px solid #20150b}
+.prompt-area{width:100%;min-height:360px;resize:vertical;padding:16px;background:#f5e6bf;border:5px solid #20150b;color:#1d1408;font-size:1rem;line-height:1.5;font-weight:700;box-shadow:inset 5px 5px 0 rgba(0,0,0,.12)}
+.copy-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.copy-note{font-weight:900;color:#23612f}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:18px}
+.world-card{position:relative;background:#c98b49;padding:24px 18px 18px;min-height:210px;border:5px solid #20150b;box-shadow:7px 7px 0 #20150b}
+.grass-top{position:absolute;top:0;left:0;right:0;height:18px;background:repeating-linear-gradient(90deg,var(--grass) 0 20px,var(--grass2) 20px 40px)}
+.card-icon{font-size:2rem;margin-top:10px}
+.world-card h3{font-size:1.25rem;margin:8px 0;color:#fff;text-shadow:3px 3px 0 #20150b}
+.world-card p{font-weight:900;min-height:48px}
+.world-card a{display:inline-block;margin-top:14px;background:var(--diamond)}
+.quiz{background:#d6d1c4}
+.hud{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.badge{background:var(--coal);color:#fff;padding:10px 12px;border:4px solid #20150b;font-weight:900}
+.question-box{background:#fff7df;padding:18px;border:5px solid #20150b}
+#question{font-size:clamp(1.35rem,3vw,2.1rem);line-height:1.25}
+.options{display:grid;gap:14px;margin-top:18px}
+.option{width:100%;text-align:left;background:#e9d5a4}
+.option.correct{background:#45c95a;color:#071b09}
+.option.wrong{background:#e04435;color:#fff}
+.option:disabled{opacity:1;cursor:not-allowed}
+.explain{display:none;background:#f7e08f;margin-top:18px;padding:18px;border:5px solid #20150b;font-weight:900;line-height:1.6}
+.next-btn{display:none;background:var(--grass);color:#fff}
+.result{display:none;text-align:center;background:#fff7df;padding:22px;border:5px solid #20150b;margin-top:18px}
+.footer{text-align:center;background:#20150b;color:#fff;padding:18px;font-weight:900}
+.block-sky{height:80px;background:repeating-linear-gradient(90deg,#86d7ff 0 40px,#79cafa 40px 80px)}
+@media(max-width:680px){
+  .hero,.section{padding:18px}
+  .pixel-border,.section{box-shadow:5px 5px 0 #20150b}
+  .prompt-area{min-height:460px;font-size:.92rem}
 }
 </style>
 </head>
-
 <body>
-
-<header>
-<h1>CYBERPUNK QUIZ GENERATOR</h1>
-<p>自動產生15題問題｜適合各類科目與知識</p>
+<div class="block-sky"></div>
+<header class="hero pixel-border">
+  <div class="kicker">MINECRAFT STYLE QUIZ HUB</div>
+  <h1>自動產生15題問題</h1>
+  <p class="subtitle">適合各類科目與知識｜像素方塊題庫基地｜一鍵複製提示詞</p>
+  <div class="toolbar">
+    <a class="btn" href="#prompt">複製提示詞</a>
+    <a class="btn" href="#worlds">查看作品入口</a>
+    <a class="btn" href="#quiz">試玩15題測驗</a>
+  </div>
 </header>
 
-<div class="container">
-
-<div class="card">
-<h2 class="section-title">提示詞產生器</h2>
-
-<textarea id="promptBox">你是一位精通前端網頁開發（HTML/CSS/JavaScript）與 UI/UX 視覺設計的專家。請幫我製作一個可以直接上傳到 GitHub Pages 發布的單一 HTML 網頁（所有代碼、樣式、腳本全部寫在同一個 index.html 檔案中，不分檔）。
+<main class="wrap">
+<section id="prompt" class="section pixel-border">
+  <h2 class="section-title"><span>📜</span>提示詞區域</h2>
+  <textarea id="promptBox" class="prompt-area">你是一位精通前端網頁開發（HTML/CSS/JavaScript）與 UI/UX 視覺設計的專家。請幫我製作一個可以直接上傳到 GitHub Pages 發布的單一 HTML 網頁（所有代碼、樣式、腳本全部寫在同一個 index.html 檔案中，不分檔）。
 
 建置需求如下：
 
 ### 1. 網站基本資訊
-- 網站標題（Title）
-- 主題標籤（Tag）
+- 網站標題（Title）：【請在這裡輸入你的網頁瀏覽器標題，例如：機器人觀念大挑戰】
+- 主題標籤（Tag）：【請在這裡輸入主題名稱，例如：STEAM與程式設計】
 
 ### 2. 視覺風格與美學
-- 核心風格：Cyberpunk
-- 指定配色：深藍、亮藍、紫色、粉色、白色
+- 核心風格：【請詳細描述視覺風格。例如：麥塊 Minecraft 像素方塊風格 / 酷炫的賽博朋克 Cyberpunk 風格 / 帥氣的日本偵探動漫風格】
+- 指定配色：【請指定4-6個主要顏色。例如：草地方塊綠、泥土棕、鑽石藍、火把黃、羊毛白、黑曜石深灰】
+- 介面氛圍：版面需包含符合主題的卡片、線索/進度提示、答對與答錯的張力特效，畫面要適合學生操作，字體大、按鈕明顯，且必須完美支援手機與電腦版（RWD 響應式設計）。
 
-### 3. 核心功能
-- easyQuestions 10題
-- hardQuestions 5題
-- 選項自動洗牌
-- 15題隨機出題
-- 解答與說明
-- 分數與結算
-- RWD 響應式設計
+### 3. 核心功能與 JavaScript 邏輯
+1. 題庫與隨機抽題機制（重要）：
+   - 程式內需包含兩個獨立的題庫陣列：easyQuestions（基礎題庫）與 hardQuestions（進階題庫）。
+   - 每次網頁重新整理或點擊重新挑戰時，系統必須「隨機」從基礎題庫抽取 10 題，再從進階題庫抽取 5 題，組合成共 15 題的正式測驗。
+   - 測驗順序必須是：前 10 題為隨機的基礎題，後 5 題為隨機的進階題。
+2. 選項自動洗牌（防作弊）：
+   - 每一題共有 3 個選項。
+   - 每次載入題目時，這 3 個選項的順序（A / B / C 的位置）必須自動打亂（Shuffle）。
+   - 洗牌後，正確答案的判斷邏輯必須完全正確，絕對不能錯亂。
+   - 答錯時顯示的正確答案提示，也必須依照當次洗牌後的 A / B / C 實際位置來顯示。
+3. 答題規則：
+   - 每題只能作答一次。答對時加 10 分。
+   - 點擊選項後，無論對錯，都必須立刻凍結所有選項，並亮出正確答案（金色/綠色表示）與錯誤答案（若玩家選錯，用紅色表示）。
+   - 同時顯示「解答說明與線索」面板。
+   - 答完當前題目後，畫面才顯示「下一題」或「下一個挑戰」按鈕，引導玩家前進。
+4. 結算與重新挑戰：
+   - 第 15 題答完後，顯示結算畫面，計算總分（滿分 150 分）。
+   - 提供「重新挑戰」按鈕，點擊後重置所有分數、進度，並重新洗牌抽題。
 
-### 4. 題庫格式
+### 4. 評語級距設定
+- 130 分以上：【完美破案！你已經掌握大部分觀念。】
+- 90 分 ~ 120 分：【表現不錯！再複習幾個觀念，就能更穩。】
+- 低於 90 分：【線索還有點混亂，重新挑戰一次，下一輪就能抓到關鍵重點。】
+
+### 5. 程式碼結構與題庫資料格式
+請將題目集中放在 JavaScript 頂部的陣列中，並附上清晰的中文註解（告訴使用者：「若要更換題目，只需修改此處陣列」）。
+出題時，為了方便出題者，請讓正確答案固定放在選項陣列 o 的第 0 個位置（即第一個位置），並將 a 設為 0。網頁執行時再由程式自動洗牌。
+
+格式範例：
 {
-q:"題目",
-o:["正確答案","錯誤1","錯誤2"],
-a:0,
-e:"解答"
+  q: "題目文字",
+  o: ["標準答案", "干擾選項一", "干擾選項二"],
+  a: 0,
+  e: "詳盡的解答說明與觀念提示"
 }
-</textarea>
 
-<button onclick="copyPrompt()">複製提示詞</button>
-</div>
+請幫我直接生成符合以上所有條件、包含 35 題基礎題與 15 題進階題（共 50 題完整題庫）的完整代碼。</textarea>
+  <div class="copy-row">
+    <button onclick="copyPrompt()">一鍵複製提示詞</button>
+    <div id="copyStatus" class="copy-note">可直接貼到 ChatGPT 產生新的 15 題測驗網頁</div>
+  </div>
+</section>
 
-<div class="card">
-<h2 class="section-title">題目網站入口</h2>
+<section id="worlds" class="section pixel-border">
+  <h2 class="section-title"><span>🧭</span>學生作品入口地圖</h2>
+  <div class="grid">
+  <article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>夢核世界</h3>
+  <p>進入夢境方塊世界，展開知識探索。</p>
+  <a href="https://lpp0210-tech.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>奇觀調查局</h3>
+  <p>調查世界奇觀與神秘線索。</p>
+  <a href="https://hxj1028-boop.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>Roblox 各種遊戲知識</h3>
+  <p>挑戰 Roblox 玩家知識庫。</p>
+  <a href="https://lucas-1103.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>哪個食物更多人討厭?</h3>
+  <p>用選擇題調查食物喜好。</p>
+  <a href="https://tungtung103624-png.github.io/food/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>公民刑法大挑戰</h3>
+  <p>公民與刑法觀念闖關。</p>
+  <a href="https://wilsonlin00611-tech.github.io/202060516/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>歷史地理知識大挑戰</h3>
+  <p>穿越歷史與地理地圖。</p>
+  <a href="https://bhes109111-dot.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>葬送的芙莉蓮</h3>
+  <p>動漫主題知識挑戰。</p>
+  <a href="https://bhes109106-eng.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>案件：【柯南角色】</h3>
+  <p>角色線索與推理案件。</p>
+  <a href="https://ruby1030323-hub.github.io/Conan/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>動漫角色大挑戰</h3>
+  <p>動漫角色辨識與知識測驗。</p>
+  <a href="https://tommy1207-lang.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>【動漫角色】推理挑戰</h3>
+  <p>動漫角色推理題庫。</p>
+  <a href="https://irene0212-a11y.github.io/TEST/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>調查案件：國小高年級數學</h3>
+  <p>高年級數學偵探挑戰。</p>
+  <a href="https://xcf1026-glitch.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>偵探解謎：知識破解</h3>
+  <p>綜合知識解謎任務。</p>
+  <a href="https://hzy0213.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+<article class="world-card">
+  <div class="grass-top"></div>
+  <div class="card-icon">⛏️</div>
+  <h3>案件主題：資訊安全小偵探</h3>
+  <p>資訊安全觀念闖關。</p>
+  <a href="https://bhes109307-cpu.github.io/test/" target="_blank" rel="noopener">進入地圖</a>
+</article>
+  </div>
+</section>
 
-<div class="links">
+<section id="quiz" class="section pixel-border quiz">
+  <h2 class="section-title"><span>💎</span>15題方塊知識試煉</h2>
+  <div class="hud">
+    <div class="badge" id="progress">第 1 / 15 題</div>
+    <div class="badge" id="score">分數：0</div>
+    <div class="badge" id="level">基礎礦區</div>
+  </div>
+  <div class="question-box">
+    <h2 id="question">題目載入中...</h2>
+    <div id="options" class="options"></div>
+    <div id="explain" class="explain"></div>
+    <button id="nextBtn" class="next-btn" onclick="nextQuestion()">下一個挑戰</button>
+    <div id="result" class="result"></div>
+  </div>
+</section>
+</main>
 
-<div class="link-card">
-<h3>夢核世界</h3>
-<a href="https://lpp0210-tech.github.io/test/" target="_blank">進入網站</a>
-</div>
-
-<div class="link-card">
-<h3>奇觀調查局</h3>
-<a href="https://hxj1028-boop.github.io/test/" target="_blank">進入網站</a>
-</div>
-
-<div class="link-card">
-<h3>Roblox 遊戲知識</h3>
-<a href="https://lucas-1103.github.io/test/" target="_blank">進入網站</a>
-</div>
-
-<div class="link-card">
-<h3>公民刑法大挑戰</h3>
-<a href="https://wilsonlin00611-tech.github.io/202060516/" target="_blank">進入網站</a>
-</div>
-
-<div class="link-card">
-<h3>歷史地理知識</h3>
-<a href="https://bhes109111-dot.github.io/test/" target="_blank">進入網站</a>
-</div>
-
-<div class="link-card">
-<h3>資訊安全小偵探</h3>
-<a href="https://bhes109307-cpu.github.io/test/" target="_blank">進入網站</a>
-</div>
-
-</div>
-</div>
-
-<div class="card quiz-box">
-
-<div class="progress" id="progress"></div>
-
-<h2 id="question">題目載入中...</h2>
-
-<div id="options"></div>
-
-<div class="explain" id="explain"></div>
-
-<button class="next-btn" id="nextBtn" onclick="nextQuestion()">下一題</button>
-
-<div class="result" id="result"></div>
-
-</div>
-
-</div>
+<footer class="footer">⛏️ BLOCK QUIZ DATABASE ｜ GitHub Pages Ready</footer>
 
 <script>
-
-function copyPrompt(){
-const box=document.getElementById("promptBox");
-box.select();
-document.execCommand("copy");
-alert("提示詞已複製！");
+async function copyPrompt(){
+  const text=document.getElementById("promptBox").value;
+  const status=document.getElementById("copyStatus");
+  try{
+    await navigator.clipboard.writeText(text);
+    status.textContent="✅ 已複製，可以貼到 ChatGPT 使用！";
+  }catch(err){
+    const box=document.getElementById("promptBox");
+    box.focus();box.select();
+    document.execCommand("copy");
+    status.textContent="✅ 已使用備用方式複製！";
+  }
 }
 
-/* ==========================
-若要更換題目，只需修改此處陣列
-========================== */
+/* =========================================================
+若要更換題目，只需修改此處陣列。
+出題者只要把正確答案固定放在 o[0]，a 固定為 0。
+網頁執行時會自動洗牌選項與抽題。
+========================================================= */
 
-const easyQuestions=[];
+const easyQuestions = [
+{ q: 'HTML 的主要用途是什麼？', o: ['建立網頁內容結構', '製作實體積木', '控制冰箱溫度'], a: 0, e: 'HTML 負責網頁標題、段落、圖片與連結等內容結構。' },
+{ q: 'CSS 的主要功能是什麼？', o: ['設計網頁外觀與版面', '儲存電腦檔案', '讓電腦關機'], a: 0, e: 'CSS 用來控制顏色、字型、間距、排版與動畫效果。' },
+{ q: 'JavaScript 通常用來做什麼？', o: ['加入互動功能', '印出紙本作業', '清理鍵盤灰塵'], a: 0, e: 'JavaScript 可以讓按鈕、分數、隨機題目與遊戲互動運作。' },
+{ q: 'GitHub Pages 可以做什麼？', o: ['發布靜態網頁', '煮晚餐', '自動修電腦'], a: 0, e: 'GitHub Pages 可將 HTML、CSS、JavaScript 網頁公開發布。' },
+{ q: '一個單一 HTML 網頁通常可以包含哪些內容？', o: ['HTML、CSS 與 JavaScript', '只有圖片不能有文字', '只能放影片'], a: 0, e: '單一 HTML 可以把結構、樣式與腳本放在同一個檔案中。' },
+{ q: '選擇題洗牌的目的通常是什麼？', o: ['降低固定答案位置造成的作弊', '讓題目消失', '讓網頁不能開啟'], a: 0, e: '選項洗牌可讓每次答案位置不同，但正確判斷仍要準確。' },
+{ q: 'RWD 響應式設計的目的是什麼？', o: ['讓網頁適合不同螢幕', '讓電腦變重', '讓鍵盤發光'], a: 0, e: 'RWD 讓手機、平板與電腦都有適合的版面。' },
+{ q: '在測驗遊戲中，分數系統的功能是什麼？', o: ['記錄玩家答題表現', '刪除題目', '改變網址名稱'], a: 0, e: '分數能讓玩家知道自己的學習成果。' },
+{ q: '題庫陣列 easyQuestions 通常代表什麼？', o: ['基礎題庫', '背景音樂清單', '圖片大小設定'], a: 0, e: 'easyQuestions 可存放較簡單的基礎題目。' },
+{ q: '題庫陣列 hardQuestions 通常代表什麼？', o: ['進階題庫', '滑鼠游標樣式', '網站密碼'], a: 0, e: 'hardQuestions 可存放較難的進階題目。' },
+{ q: '在題目格式中 q 通常代表什麼？', o: ['題目文字', '按鈕顏色', '網頁高度'], a: 0, e: 'q 可用來儲存要顯示給玩家的問題。' },
+{ q: '在題目格式中 o 通常代表什麼？', o: ['選項陣列', '分數上限', '背景圖片'], a: 0, e: 'o 通常儲存多個選項文字。' },
+{ q: '在題目格式中 e 通常代表什麼？', o: ['解答說明', '網頁標題顏色', '玩家名稱'], a: 0, e: 'e 可顯示答題後的觀念提示或線索。' },
+{ q: '若 a 固定為 0，代表什麼？', o: ['正確答案放在選項第 0 個位置', '永遠答錯', '沒有題目'], a: 0, e: '出題者可固定把標準答案放第一個，程式再自動洗牌。' },
+{ q: '答題後凍結選項的原因是什麼？', o: ['避免同一題重複作答', '增加題目數量', '改變網站網址'], a: 0, e: '凍結選項可確保每題只能作答一次。' },
+{ q: '答對時加 10 分，15 題滿分是多少？', o: ['150 分', '15 分', '1000 分'], a: 0, e: '15 題乘以每題 10 分，滿分是 150 分。' },
+{ q: '重新挑戰按鈕通常會做什麼？', o: ['重置分數並重新抽題', '關掉螢幕', '刪除瀏覽器'], a: 0, e: '重新挑戰會讓玩家再玩一次，並重新洗牌題目。' },
+{ q: '麥塊風格網頁常見元素是什麼？', o: ['像素方塊與草地方塊', '玻璃高樓照片', '水墨山水'], a: 0, e: '麥塊風常用方塊、草地、泥土、工具與像素邊框。' },
+{ q: '在 CSS 中 border 可以設定什麼？', o: ['邊框', '題目答案', '瀏覽器帳號'], a: 0, e: 'border 用來設定元素邊框粗細、樣式與顏色。' },
+{ q: '在 CSS 中 background 可以設定什麼？', o: ['背景', '電腦硬碟', '網路速度'], a: 0, e: 'background 可設定背景顏色、圖片或漸層。' },
+{ q: '在 JavaScript 中 array 是什麼？', o: ['可存放多個資料的陣列', '螢幕亮度', '鍵盤品牌'], a: 0, e: '陣列能儲存多筆題目或選項資料。' },
+{ q: 'Math.random() 常用來做什麼？', o: ['產生隨機數', '儲存圖片', '變更電源'], a: 0, e: 'Math.random() 可用於抽題或選項洗牌。' },
+{ q: 'target="_blank" 的作用是什麼？', o: ['在新分頁開啟連結', '讓按鈕變小', '清除文字'], a: 0, e: 'target="_blank" 常用於外部網站連結。' },
+{ q: 'textarea 適合放什麼？', o: ['可複製或編輯的長文字', '只能放一個表情符號', '只能放圖片'], a: 0, e: 'textarea 適合放提示詞或長篇文字。' },
+{ q: 'copy 按鈕通常需要搭配什麼？', o: ['JavaScript 複製功能', '掃把', '電池'], a: 0, e: 'JavaScript 可以把文字框內容複製到剪貼簿。' },
+{ q: '學生操作網頁時，按鈕應該如何設計？', o: ['大且清楚', '越小越好', '藏在角落'], a: 0, e: '清楚的大按鈕能提升投影與手機操作體驗。' },
+{ q: '答錯時顯示正確答案的好處是什麼？', o: ['幫助玩家立即修正觀念', '讓題目變空白', '讓網頁重新安裝'], a: 0, e: '即時回饋能讓學習更有效。' },
+{ q: '解答說明面板的功能是什麼？', o: ['補充觀念與線索', '關閉網頁', '刪除選項'], a: 0, e: '解答面板能說明為什麼答案正確。' },
+{ q: '卡片式設計的優點是什麼？', o: ['資訊分區清楚', '讓文字看不見', '讓網站不能捲動'], a: 0, e: '卡片能把不同主題或連結整理得更清楚。' },
+{ q: '網站標題 title 會顯示在哪裡？', o: ['瀏覽器分頁', '滑鼠底部', '鍵盤上'], a: 0, e: 'title 會顯示在瀏覽器分頁或搜尋結果標題。' },
+{ q: '手機版設計常用 media query 做什麼？', o: ['依螢幕寬度調整版面', '改變電腦品牌', '清除瀏覽器歷史'], a: 0, e: 'media query 可針對手機與桌機設定不同樣式。' },
+{ q: '進度提示 第 3 / 15 題 表示什麼？', o: ['目前第 3 題，共 15 題', '玩家有 3 台電腦', '網站有 15 個作者'], a: 0, e: '進度提示能讓玩家知道目前挑戰位置。' },
+{ q: '若選項有 A/B/C 三個位置，洗牌後應注意什麼？', o: ['正確答案判斷不能錯亂', '只能永遠選 A', '題目不能顯示'], a: 0, e: '洗牌後要用資料標記追蹤哪個選項是正確。' },
+{ q: 'GitHub Repo 中首頁檔案通常叫什麼？', o: ['index.html', 'final.docx', 'music.mp3'], a: 0, e: 'GitHub Pages 常以 index.html 作為網站首頁。' },
+{ q: '網頁中的 emoji 可以用來做什麼？', o: ['增加主題氛圍與提示', '自動修正程式', '取代所有程式碼'], a: 0, e: '適量 emoji 能增加學生操作時的趣味與辨識度。' }
+];
 
-for(let i=1;i<=35;i++){
-easyQuestions.push({
-q:`基礎題目 ${i}`,
-o:[`正確答案 ${i}`,"錯誤答案A","錯誤答案B"],
-a:0,
-e:`這是第 ${i} 題的解答說明`
-});
-}
-
-const hardQuestions=[];
-
-for(let i=1;i<=15;i++){
-hardQuestions.push({
-q:`進階題目 ${i}`,
-o:[`正確答案 ${i}`,"錯誤答案A","錯誤答案B"],
-a:0,
-e:`這是進階題 ${i} 的詳細解答`
-});
-}
+const hardQuestions = [
+{ q: '為什麼抽題時要使用 [...easyQuestions] 複製陣列後再洗牌？', o: ['避免改動原始題庫順序', '讓題庫變成空白', '讓答案固定在 A'], a: 0, e: '複製陣列再洗牌可以保留原始題庫，避免每次操作都改到資料來源。' },
+{ q: '若正確答案固定在 o[0]，洗牌後如何判斷正確答案？', o: ['把每個選項包成含 correct 屬性的物件', '只看按鈕顏色', '永遠選第一個按鈕'], a: 0, e: '洗牌前建立 {text, correct} 物件，洗牌後仍能追蹤正確答案。' },
+{ q: '為什麼答題後要 disabled 所有選項？', o: ['防止玩家重複點擊改變分數', '讓正確答案消失', '讓題目變成圖片'], a: 0, e: 'disabled 可避免同一題重複觸發分數與回饋邏輯。' },
+{ q: '若第 15 題答完後 currentQuestion >= 15，應該做什麼？', o: ['顯示結算畫面', '回到第 1 題但不重置分數', '刪除 hardQuestions'], a: 0, e: '最後一題後應進入總分與評語頁面。' },
+{ q: '為什麼使用 grid-template-columns: repeat(auto-fit, minmax(...))？', o: ['讓卡片可依螢幕寬度自動換行', '讓所有卡片重疊', '讓文字不能選取'], a: 0, e: 'CSS Grid 的 auto-fit 與 minmax 很適合做 RWD 卡片排版。' },
+{ q: '若要讓提示詞一鍵複製較穩定，可優先使用什麼 API？', o: ['navigator.clipboard.writeText', 'Math.floor', 'console.clear'], a: 0, e: 'Clipboard API 是現代瀏覽器常用的複製文字方式。' },
+{ q: '為什麼測驗正式順序要前 10 題基礎、後 5 題進階？', o: ['讓難度逐步提升', '讓進階題全部消失', '讓基礎題不能計分'], a: 0, e: '先基礎後進階能讓學生逐步進入挑戰。' },
+{ q: '若 easyQuestions 不足 10 題，可能發生什麼問題？', o: ['正式測驗題數不足', '網站自動變快', '答案全部變成正確'], a: 0, e: '抽題數量需要小於或等於題庫數量。' },
+{ q: '為什麼解答提示要在答題後才顯示？', o: ['避免玩家作答前直接看到線索', '讓按鈕不能點', '讓題庫變大'], a: 0, e: '答題後顯示說明符合測驗流程，也能保留學習回饋。' },
+{ q: '為什麼 classList.add 適合用來標示 correct / wrong？', o: ['可動態加入 CSS 視覺狀態', '可改變網址網域', '可自動產生題庫'], a: 0, e: 'classList 能在互動後替元素加入正確或錯誤樣式。' },
+{ q: '若要讓網站完全單檔上傳 GitHub Pages，應避免什麼？', o: ['依賴本機才有的外部檔案', '使用 HTML 標籤', '使用 CSS 樣式'], a: 0, e: '單檔網頁若引用本機圖片或檔案，發布後可能讀不到。' },
+{ q: '為什麼按鈕 hover 效果要搭配學生族群適度使用？', o: ['提升互動感但不干擾閱讀', '讓答案無法判斷', '讓手機不能開啟'], a: 0, e: 'hover 能增加回饋，但設計仍要保持清楚易讀。' },
+{ q: '在結算頁根據分數顯示評語屬於哪種邏輯？', o: ['條件判斷', '資料庫備份', '圖片壓縮'], a: 0, e: 'if / else 可依分數範圍顯示不同評語。' },
+{ q: '為什麼外部連結建議加 rel="noopener"？', o: ['提升新分頁開啟的安全性', '讓網站變成遊戲主機', '讓 CSS 更短'], a: 0, e: 'noopener 可降低新分頁對原頁面的操作風險。' },
+{ q: '若要讓麥塊風更明顯，CSS 可以加入什麼視覺語言？', o: ['像素邊框、方塊陰影、草地泥土配色', '透明玻璃和細字體', '黑白報紙排版'], a: 0, e: '像素化邊框、方塊陰影與草地泥土色系能強化麥塊感。' }
+];
 
 function shuffle(array){
-return array.sort(()=>Math.random()-0.5);
+  const arr=[...array];
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
 }
 
 let selectedQuestions=[];
 let currentQuestion=0;
-let score=0;
+let totalScore=0;
 
 function generateQuiz(){
-
-selectedQuestions=[
-...shuffle([...easyQuestions]).slice(0,10),
-...shuffle([...hardQuestions]).slice(0,5)
-];
-
-currentQuestion=0;
-score=0;
-
-document.getElementById("result").style.display="none";
-
-showQuestion();
-
+  selectedQuestions=[
+    ...shuffle(easyQuestions).slice(0,10),
+    ...shuffle(hardQuestions).slice(0,5)
+  ];
+  currentQuestion=0;
+  totalScore=0;
+  document.getElementById("result").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  showQuestion();
 }
 
 function showQuestion(){
-
-const q=selectedQuestions[currentQuestion];
-
-document.getElementById("progress").innerHTML=
-`第 ${currentQuestion+1} / 15 題 ｜ 分數：${score}`;
-
-document.getElementById("question").innerHTML=q.q;
-
-const optionsDiv=document.getElementById("options");
-optionsDiv.innerHTML="";
-
-document.getElementById("explain").style.display="none";
-document.getElementById("nextBtn").style.display="none";
-
-let shuffled=q.o.map((text,index)=>({
-text,
-correct:index===q.a
-}));
-
-shuffled=shuffle(shuffled);
-
-shuffled.forEach(opt=>{
-
-const btn=document.createElement("button");
-
-btn.className="option";
-
-btn.innerHTML=opt.text;
-
-btn.onclick=()=>selectAnswer(btn,opt.correct,shuffled,q);
-
-optionsDiv.appendChild(btn);
-
-});
-
+  const q=selectedQuestions[currentQuestion];
+  document.getElementById("progress").textContent=`第 ${currentQuestion+1} / 15 題`;
+  document.getElementById("score").textContent=`分數：${totalScore}`;
+  document.getElementById("level").textContent=currentQuestion<10?"基礎礦區":"進階地牢";
+  document.getElementById("question").textContent=q.q;
+  document.getElementById("explain").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  const optionsDiv=document.getElementById("options");
+  optionsDiv.innerHTML="";
+  const shuffledOptions=shuffle(q.o.map((text,index)=>({
+    text:text,
+    correct:index===q.a
+  })));
+  shuffledOptions.forEach((opt,index)=>{
+    const btn=document.createElement("button");
+    btn.className="option";
+    btn.textContent=`${String.fromCharCode(65+index)}. ${opt.text}`;
+    btn.onclick=()=>selectAnswer(btn,opt,shuffledOptions,q);
+    optionsDiv.appendChild(btn);
+  });
 }
 
-function selectAnswer(button,correct,shuffled,q){
-
-const buttons=document.querySelectorAll(".option");
-
-buttons.forEach(btn=>btn.disabled=true);
-
-buttons.forEach((btn,index)=>{
-
-if(shuffled[index].correct){
-btn.classList.add("correct");
-}
-});
-
-if(correct){
-
-button.classList.add("correct");
-score+=10;
-
-}else{
-
-button.classList.add("wrong");
-
-}
-
-document.getElementById("explain").style.display="block";
-
-document.getElementById("explain").innerHTML=
-`<h3>解答說明</h3><br>${q.e}`;
-
-document.getElementById("nextBtn").style.display="inline-block";
-
+function selectAnswer(clicked,opt,shuffledOptions,q){
+  const buttons=[...document.querySelectorAll(".option")];
+  buttons.forEach(btn=>btn.disabled=true);
+  let correctLetter="A";
+  buttons.forEach((btn,index)=>{
+    if(shuffledOptions[index].correct){
+      btn.classList.add("correct");
+      correctLetter=String.fromCharCode(65+index);
+    }
+  });
+  if(opt.correct){
+    totalScore+=10;
+    clicked.classList.add("correct");
+  }else{
+    clicked.classList.add("wrong");
+  }
+  document.getElementById("score").textContent=`分數：${totalScore}`;
+  const explain=document.getElementById("explain");
+  explain.style.display="block";
+  explain.innerHTML=`<h3>🧱 解答說明與線索</h3><p>正確答案是 ${correctLetter}。</p><p>${q.e}</p>`;
+  document.getElementById("nextBtn").style.display="inline-block";
 }
 
 function nextQuestion(){
-
-currentQuestion++;
-
-if(currentQuestion>=15){
-
-showResult();
-
-}else{
-
-showQuestion();
-
-}
-
+  currentQuestion++;
+  if(currentQuestion>=15) showResult();
+  else showQuestion();
 }
 
 function showResult(){
-
-document.getElementById("question").innerHTML="挑戰完成";
-
-document.getElementById("options").innerHTML="";
-
-document.getElementById("explain").style.display="none";
-
-document.getElementById("nextBtn").style.display="none";
-
-let comment="";
-
-if(score>=130){
-
-comment="完美破案！你已經掌握大部分觀念。";
-
-}else if(score>=90){
-
-comment="表現不錯！再複習幾個觀念，就能更穩。";
-
-}else{
-
-comment="線索還有點混亂，重新挑戰一次，下一輪就能抓到關鍵重點。";
-
-}
-
-const result=document.getElementById("result");
-
-result.style.display="block";
-
-result.innerHTML=
-`
-<h2>總分：${score} / 150</h2>
-<br>
-<h3>${comment}</h3>
-<br>
-<button onclick="generateQuiz()">重新挑戰</button>
-`;
-
+  document.getElementById("question").textContent="挑戰完成，寶箱開啟！";
+  document.getElementById("options").innerHTML="";
+  document.getElementById("explain").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  let comment="";
+  if(totalScore>=130) comment="完美破案！你已經掌握大部分觀念。";
+  else if(totalScore>=90) comment="表現不錯！再複習幾個觀念，就能更穩。";
+  else comment="線索還有點混亂，重新挑戰一次，下一輪就能抓到關鍵重點。";
+  const result=document.getElementById("result");
+  result.style.display="block";
+  result.innerHTML=`<h2>總分：${totalScore} / 150</h2><p style="font-size:1.25rem;font-weight:900;margin:14px 0">${comment}</p><button onclick="generateQuiz()">重新挑戰</button>`;
 }
 
 generateQuiz();
-
 </script>
-
 </body>
 </html>
